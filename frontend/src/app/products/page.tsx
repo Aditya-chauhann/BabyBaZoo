@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard, { Product } from "@/components/ProductCard";
-import { SlidersHorizontal, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 function ProductsList() {
   const searchParams = useSearchParams();
@@ -84,10 +84,7 @@ function ProductsList() {
           </div>
 
           <div className="flex items-center gap-4 w-full md:w-auto">
-            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium hover:bg-gray-50 transition-colors shadow-sm">
-              <SlidersHorizontal size={18} />
-              Filters
-            </button>
+
             
             <div className="relative group flex-1 md:flex-none">
               <button className="flex items-center justify-between gap-2 w-full md:w-auto px-4 py-2 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium hover:bg-gray-50 transition-colors shadow-sm">
@@ -106,7 +103,7 @@ function ProductsList() {
         {products.length === 0 && !loading ? (
           <div className="text-center py-20 bg-white rounded-3xl border border-gray-100">
             <h3 className="text-xl font-serif text-gray-900 mb-2">No products found</h3>
-            <p className="text-gray-500">Try adjusting your filters or search criteria.</p>
+            <p className="text-gray-500">Try adjusting your search criteria.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
