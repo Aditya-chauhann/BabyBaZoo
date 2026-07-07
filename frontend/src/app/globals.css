@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+:root {
+  --background: #FFF9F5; /* Cream base */
+  --foreground: #2d3748;
+  --blush-100: #FDE2E4;
+  --blush-200: #FBC4C4;
+  --sky-100: #CDE7F0;
+  --sky-200: #A9D6E5;
+  --gold: #E5B25D;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-blush-100: var(--blush-100);
+  --color-blush-200: var(--blush-200);
+  --color-sky-100: var(--sky-100);
+  --color-sky-200: var(--sky-200);
+  --color-gold: var(--gold);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar for side drawer */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--blush-200);
+  border-radius: 10px;
+}
