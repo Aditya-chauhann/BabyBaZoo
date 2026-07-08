@@ -2,9 +2,9 @@ import { Mail } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-100 pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+    <footer className="bg-white border-t border-gray-100 pt-8 pb-4">
+      <div className="w-full px-4 sm:px-8 lg:px-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           
           {/* Brand & Social */}
           <div className="space-y-6">
@@ -31,10 +31,10 @@ export default function Footer() {
           <div>
             <h4 className="font-sans font-semibold text-gray-900 uppercase tracking-wider text-sm mb-6">Shop</h4>
             <ul className="space-y-4">
-              <li><a href="#" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">Clothing</a></li>
-              <li><a href="#" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">Educational Toys</a></li>
-              <li><a href="#" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">Nursery & Gear</a></li>
-              <li><a href="#" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">New Arrivals</a></li>
+              <li><a href="/products?categoryId=1336151594957590528" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">Clothing</a></li>
+              <li><a href="/products?categoryId=1336151594957590529" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">Educational Toys</a></li>
+              <li><a href="/products?categoryId=1336151594957590530" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">Nursery & Gear</a></li>
+              <li><a href="/products" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">New Arrivals</a></li>
             </ul>
           </div>
 
@@ -43,7 +43,7 @@ export default function Footer() {
             <h4 className="font-sans font-semibold text-gray-900 uppercase tracking-wider text-sm mb-6">Support</h4>
             <ul className="space-y-4">
               <li><a href="#" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">Help Center</a></li>
-              <li><a href="#" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">Track Order</a></li>
+              <li><a href="/account/orders" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">Track Order</a></li>
               <li><a href="#" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">Returns & Exchanges</a></li>
               <li><a href="#" className="font-sans text-gray-500 hover:text-[var(--gold)] transition-colors">Contact Us</a></li>
             </ul>

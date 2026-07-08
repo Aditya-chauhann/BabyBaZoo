@@ -17,7 +17,7 @@ async function bootstrap() {
       logger.info(`Babybazoo server listening on port ${env.PORT}`);
     });
   } catch (error) {
-    logger.error('Failed to start server', { error: (error as Error).message });
+    logger.error('Failed to start server', { error: (error as Error).message, stack: (error as Error).stack });
     process.exit(1);
   }
 }

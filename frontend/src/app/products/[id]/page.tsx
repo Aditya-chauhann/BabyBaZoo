@@ -146,7 +146,7 @@ export default function ProductDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-8 pb-16 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="max-w-[1500px] mx-auto">
+      <div className="w-full mx-auto">
         <Link href="/products" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[var(--gold)] mb-5 transition-colors">
           <ArrowLeft size={16} /> Back to Products
         </Link>
@@ -290,25 +290,25 @@ export default function ProductDetailPage() {
               About this Product
             </h3>
             
-            <div className="relative max-w-5xl mx-auto z-10">
+            <div className="relative w-full z-10">
               <div 
                 className={`transition-all duration-500 ease-in-out ${!isDescExpanded ? 'max-h-[350px] overflow-hidden relative' : ''}`}
               >
                 {cleanDescription && (
                   <div 
-                    className="text-base text-gray-600 leading-relaxed prose prose-lg prose-headings:font-serif prose-headings:text-gray-900 prose-p:text-gray-600 max-w-none mb-10"
+                    className="text-base text-gray-600 leading-relaxed whitespace-pre-line prose prose-lg prose-headings:font-serif prose-headings:text-gray-900 prose-p:text-gray-600 max-w-none mb-10"
                     dangerouslySetInnerHTML={{ __html: cleanDescription }}
                   />
                 )}
                 
                 {descImages.length > 0 && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mt-8">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
                     {descImages.map((src, idx) => (
-                      <div key={idx} className="relative aspect-[4/5] bg-gray-50 rounded-2xl overflow-hidden shadow-sm group">
+                      <div key={idx} className="relative h-64 bg-gray-50 rounded-2xl overflow-hidden shadow-sm group">
                         <img 
                           src={src} 
                           alt={`Product Detail ${idx + 1}`}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                          className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-700 ease-in-out"
                           loading="lazy"
                         />
                       </div>

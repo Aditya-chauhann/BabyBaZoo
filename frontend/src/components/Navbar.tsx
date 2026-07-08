@@ -10,7 +10,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 w-full z-30 bg-white/80 backdrop-blur-md border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-8 lg:px-12">
         <div className="flex justify-between items-center h-20">
           
           {/* Mobile Menu */}
@@ -21,14 +21,14 @@ export default function Navbar() {
           </div>
 
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center justify-center flex-1 md:flex-none md:justify-start">
+          <div className="flex items-center justify-start flex-1">
             <a href="/" className="font-serif text-3xl font-medium tracking-tight">
               <span className="text-[var(--gold)]">Baby</span><span className="text-black">Ba</span><span className="text-[var(--gold)]">Zoo.</span>
             </a>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center justify-center space-x-8 flex-1">
             <a href="/products" className="font-sans text-gray-600 hover:text-gray-900 transition-colors">All</a>
             <a href="/products?categoryId=1336151594957590528" className="font-sans text-gray-600 hover:text-gray-900 transition-colors">Clothing</a>
             <a href="/products?categoryId=1336151594957590529" className="font-sans text-gray-600 hover:text-gray-900 transition-colors">Toys</a>
@@ -36,7 +36,7 @@ export default function Navbar() {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center justify-end flex-1 space-x-4">
             <button className="p-2 text-gray-500 hover:text-gray-900 transition-colors hidden sm:block">
               <Search size={22} />
             </button>

@@ -105,13 +105,26 @@ export default function Hero() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
-          <p className="text-[#FFF9F5] text-sm tracking-widest uppercase mb-2">Scroll to explore</p>
-          <motion.div 
-            animate={{ y: [0, 10, 0] }} 
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="w-px h-16 bg-[#FFF9F5]"
-          />
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center">
+          <button 
+            onClick={() => {
+              if (containerRef.current) {
+                const rect = containerRef.current.getBoundingClientRect();
+                window.scrollTo({
+                  top: window.scrollY + rect.bottom,
+                  behavior: 'smooth'
+                });
+              }
+            }}
+            className="group flex flex-col items-center cursor-pointer hover:scale-105 transition-all p-4"
+          >
+            <p className="text-[#FFF9F5] text-sm tracking-widest uppercase mb-2 group-hover:text-[var(--gold)] font-medium transition-colors">Scroll / Click to explore</p>
+            <motion.div 
+              animate={{ y: [0, 10, 0] }} 
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="w-px h-16 bg-[#FFF9F5] group-hover:bg-[var(--gold)] transition-colors"
+            />
+          </button>
         </div>
       </div>
     </div>
