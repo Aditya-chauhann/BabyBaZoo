@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, ShoppingBag } from "lucide-react";
+import { Heart, ShoppingBag, Star } from "lucide-react";
 import Link from "next/link";
 import { useAppContext } from "../context/AppContext";
 
@@ -106,15 +106,27 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Content */}
-        <div className="p-5 flex flex-col flex-grow">
-          <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">
+        <div className="p-4 flex flex-col flex-grow">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-1.5">
             {product.categoryName}
           </p>
-          <h3 className="font-serif text-lg leading-tight text-gray-900 mb-2 line-clamp-2">
+          <h3 className="font-sans text-sm font-medium leading-relaxed text-gray-800 mb-2 line-clamp-2">
             {product.productName}
           </h3>
+          
+          {/* Mock Reviews */}
+          <div className="flex items-center gap-1 mb-3">
+            <Star size={12} className="fill-amber-400 text-amber-400" />
+            <span className="text-xs font-medium text-gray-700">
+              {(4.0 + (product.pid.charCodeAt(0) % 10) / 10).toFixed(1)}
+            </span>
+            <span className="text-xs text-gray-400">
+              ({(product.pid.charCodeAt(product.pid.length - 1) * 3) + 12})
+            </span>
+          </div>
+
           <div className="mt-auto flex items-center justify-between">
-            <p className="font-sans font-medium text-lg text-gray-900">
+            <p className="font-sans font-semibold text-base text-gray-900">
               ₹{Math.round(Number(product.sellPrice || 0))}
             </p>
             
@@ -127,7 +139,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 addToCart(product);
               }}
             >
-              <ShoppingBag size={20} />
+              <ShoppingBag size={18} />
             </button>
           </div>
         </div>
