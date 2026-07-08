@@ -193,14 +193,14 @@ class CjApiService {
         pid: data.pid,
         productName: data.productNameEn || data.productName,
         productImage: data.productImage || (data.productImageSet ? (Array.isArray(data.productImageSet) ? data.productImageSet[0] : (data.productImageSet.startsWith('[') ? JSON.parse(data.productImageSet)[0] : data.productImageSet)) : ''),
-        sellPrice: Math.round((data.sellPrice || 0) * rate),
+        sellPrice: Math.round((parseFloat(data.sellPrice) || 0) * rate),
         categoryId: data.categoryId,
         categoryName: data.categoryName,
         description: data.description,
         variants: (data.variants || []).map((v: any) => ({
           vid: v.vid,
           variantName: v.variantNameEn || v.variantName,
-          variantSellPrice: Math.round((v.variantSellPrice || 0) * rate),
+          variantSellPrice: Math.round((parseFloat(v.variantSellPrice) || 0) * rate),
           stock: v.inventoryNum || 99,
           variantSku: v.variantSku
         }))

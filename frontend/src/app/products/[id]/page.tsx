@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "../../../context/AppContext";
-import { ShoppingBag, Heart, ArrowLeft, ShieldCheck, Truck, RotateCcw, X } from "lucide-react";
+import { ShoppingBag, Heart, ArrowLeft, ShieldCheck, Truck, RotateCcw, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 
 export default function ProductDetailPage() {
@@ -19,6 +19,7 @@ export default function ProductDetailPage() {
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const [showImageModal, setShowImageModal] = useState(false);
+  const [isDescExpanded, setIsDescExpanded] = useState(false);
   
   useEffect(() => {
     fetchProduct();
@@ -247,32 +248,58 @@ export default function ProductDetailPage() {
 
         {/* Product Description Full Width */}
         {(cleanDescription || descImages.length > 0) && (
-          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mt-8 p-8 lg:p-12">
-            <h3 className="text-2xl font-serif mb-6">Product Description</h3>
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 mt-12 p-8 lg:p-12 relative overflow-hidden">
+            {/* Subtle background decoration */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--gold)]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             
-            {cleanDescription && (
+            <h3 className="text-2xl md:text-3xl font-serif mb-8 text-gray-900 flex items-center gap-3 relative z-10">
+              <span className="w-8 h-1 bg-[var(--gold)] rounded-full"></span>
+              About this Product
+            </h3>
+            
+            <div className="relative max-w-5xl mx-auto z-10">
               <div 
-                className="text-base text-gray-700 leading-relaxed prose prose-lg max-w-4xl mx-auto"
-                dangerouslySetInnerHTML={{ __html: cleanDescription }}
-              />
-            )}
+                className={`transition-all duration-500 ease-in-out ${!isDescExpanded ? 'max-h-[350px] overflow-hidden relative' : ''}`}
+              >
+                {cleanDescription && (
+                  <div 
+                    className="text-base text-gray-600 leading-relaxed prose prose-lg prose-headings:font-serif prose-headings:text-gray-900 prose-p:text-gray-600 max-w-none mb-10"
+                    dangerouslySetInnerHTML={{ __html: cleanDescription }}
+                  />
+                )}
+                
+                {descImages.length > 0 && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mt-8">
+                    {descImages.map((src, idx) => (
+                      <div key={idx} className="relative aspect-[4/5] bg-gray-50 rounded-2xl overflow-hidden shadow-sm group">
+                        <img 
+                          src={src} 
+                          alt={`Product Detail ${idx + 1}`}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                          loading="lazy"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
 
-            {descImages.length > 0 && (
-              <div className="mt-12">
-                <h4 className="text-xl font-serif mb-6 text-center text-gray-900">Product Images</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {descImages.map((src, idx) => (
-                    <div key={idx} className="relative aspect-[4/5] bg-gray-50 rounded-2xl overflow-hidden shadow-sm group">
-                      <img 
-                        src={src} 
-                        alt={`Product Detail ${idx + 1}`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                  ))}
-                </div>
+                {/* Fade out mask when collapsed */}
+                {!isDescExpanded && (
+                  <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+                )}
               </div>
-            )}
+
+              {/* Read More / Read Less Toggle */}
+              <div className="mt-8 flex justify-center">
+                <button 
+                  onClick={() => setIsDescExpanded(!isDescExpanded)}
+                  className="px-8 py-3 bg-white border-2 border-gray-100 hover:border-[var(--gold)] text-gray-700 hover:text-[var(--gold)] font-medium rounded-full transition-all duration-300 shadow-sm hover:shadow-md flex items-center gap-2 group"
+                >
+                  {isDescExpanded ? 'Show Less' : 'Read Full Description'}
+                  <ChevronDown className={`transition-transform duration-300 ${isDescExpanded ? 'rotate-180' : ''}`} size={18} />
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
