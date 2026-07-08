@@ -1,10 +1,24 @@
 "use client";
 
-import { ShoppingBag, Search, Menu, User } from "lucide-react";
+import { ShoppingBag, Search, Menu, User, X } from "lucide-react";
 import { useAppContext } from "../context/AppContext";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const { cart, setIsCartOpen, isAuthenticated, setIsAuthModalOpen, logout } = useAppContext();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+  
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
   
   const cartItemCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -36,10 +50,41 @@ export default function Navbar() {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-end flex-1 space-x-4">
-            <button className="p-2 text-gray-500 hover:text-gray-900 transition-colors hidden sm:block">
-              <Search size={22} />
-            </button>
+          <div className="flex items-center justify-end flex-1 space-x-2 sm:space-x-4">
+            
+            {/* Search */}
+            <div className="relative flex items-center hidden sm:flex">
+              {isSearchOpen ? (
+                <form 
+                  onSubmit={handleSearchSubmit} 
+                  className="flex items-center absolute right-0 bg-white border border-gray-200 rounded-full shadow-sm overflow-hidden animate-in fade-in slide-in-from-right-4 duration-200"
+                  style={{ width: '220px' }}
+                >
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search products..."
+                    className="w-full bg-transparent border-none focus:ring-0 text-sm px-4 py-2 outline-none"
+                    autoFocus
+                  />
+                  <button 
+                    type="button" 
+                    onClick={() => setIsSearchOpen(false)}
+                    className="p-2 text-gray-400 hover:text-[var(--gold)] transition-colors pr-3"
+                  >
+                    <X size={16} />
+                  </button>
+                </form>
+              ) : (
+                <button 
+                  onClick={() => setIsSearchOpen(true)}
+                  className="p-2 text-gray-500 hover:text-[var(--gold)] transition-colors"
+                >
+                  <Search size={22} />
+                </button>
+              )}
+            </div>
             <div className="relative group">
               <button 
                 className="p-2 text-gray-500 hover:text-[var(--gold)] transition-colors hidden sm:block"

@@ -16,11 +16,11 @@ function ProductsList() {
   const [sortBy, setSortBy] = useState("Newest");
 
   useEffect(() => {
-    // Reset products and page when category changes
+    // Reset products and page when category or search changes
     setProducts([]);
     setPage(1);
     fetchProducts(1, true);
-  }, [categoryId, sortBy]);
+  }, [categoryId, sortBy, searchQuery]);
 
   const fetchProducts = async (pageNum: number, reset: boolean = false) => {
     setLoading(true);
@@ -34,6 +34,15 @@ function ProductsList() {
       const data = await res.json();
       
       let newProducts = data.list || [];
+      
+      // Client-side filtering for search query
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        newProducts = newProducts.filter((p: any) => 
+          p.productName.toLowerCase().includes(query) || 
+          (p.description && p.description.toLowerCase().includes(query))
+        );
+      }
       
       // Client-side sorting for demonstration
       if (sortBy === "Price Low-High") {
@@ -62,6 +71,7 @@ function ProductsList() {
   };
 
   const getCategoryTitle = () => {
+    if (searchQuery) return `Search results for "${searchQuery}"`;
     switch(categoryId) {
       case "1336151594957590528": return "Clothing";
       case "1336151594957590529": return "Toys";
