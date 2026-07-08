@@ -9,6 +9,7 @@ export function getRedisClient(): Redis {
     const isTLSRedis = env.REDIS_URL.startsWith('rediss://');
     redisClient = new Redis(env.REDIS_URL, {
       maxRetriesPerRequest: 3,
+      family: 0,
       ...(isTLSRedis ? { tls: { rejectUnauthorized: false } } : {})
     });
 
