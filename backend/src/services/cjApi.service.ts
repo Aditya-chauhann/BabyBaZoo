@@ -149,7 +149,7 @@ class CjApiService {
         rawList = data.content[0].productList;
       }
       
-      const list = rawList.map((raw: any) => ({
+      let list = rawList.map((raw: any) => ({
         pid: raw.id,
         productName: raw.nameEn || raw.productName,
         productImage: raw.bigImage,
@@ -157,6 +157,16 @@ class CjApiService {
         categoryId: raw.categoryId,
         categoryName: raw.threeCategoryName || raw.categoryName || '',
       }));
+
+      // CJ API often returns loosely matched or random products for search queries.
+      // We apply a strict filter here to ensure relevance.
+      if (search) {
+        const lowerSearch = search.toLowerCase();
+        list = list.filter((p: any) => 
+          p.productName.toLowerCase().includes(lowerSearch) || 
+          (p.categoryName && p.categoryName.toLowerCase().includes(lowerSearch))
+        );
+      }
 
       const totalRecords = data && data.totalRecords ? data.totalRecords : list.length;
       const result = { list, total: totalRecords };
