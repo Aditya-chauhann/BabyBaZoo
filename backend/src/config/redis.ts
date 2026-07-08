@@ -6,11 +6,10 @@ let redisClient: Redis | null = null;
 
 export function getRedisClient(): Redis {
   if (!redisClient) {
-    const isTLSRedis = env.REDIS_URL.startsWith('rediss://');
-    redisClient = new Redis(env.REDIS_URL, {
+    const redisUrl = env.REDIS_URL.trim();
+    redisClient = new Redis(redisUrl, {
       maxRetriesPerRequest: 3,
-      family: 0,
-      ...(isTLSRedis ? { tls: { rejectUnauthorized: false } } : {})
+      family: 0
     });
 
     redisClient.on('connect', () => logger.info('Redis connected'));
