@@ -73,8 +73,8 @@ export class RedisService {
   }
 
   // Product cache keys
-  productListKey(page: number, limit: number, categoryId?: string): string {
-    return this.key('products', 'list', String(page), String(limit), categoryId || 'all');
+  productListKey(page: number, limit: number, categoryId?: string, search?: string): string {
+    return this.key('products', 'list', String(page), String(limit), categoryId || 'all', search || 'all');
   }
 
   productDetailKey(pid: string): string {

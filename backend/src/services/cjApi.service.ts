@@ -91,8 +91,8 @@ class CjApiService {
     return json.data;
   }
 
-  async getProducts(page = 1, limit = 10, categoryId?: string): Promise<{ list: CJProduct[], total: number }> {
-    const cacheKey = redisService.productListKey(page, limit, categoryId);
+  async getProducts(page = 1, limit = 10, categoryId?: string, search?: string): Promise<{ list: CJProduct[], total: number }> {
+    const cacheKey = redisService.productListKey(page, limit, categoryId, search);
     const cached = await redisService.get<{ list: CJProduct[], total: number }>(cacheKey);
     
     if (cached) {
@@ -104,6 +104,13 @@ class CjApiService {
       let filtered = MOCK_BABY_PRODUCTS;
       if (categoryId && categoryId !== 'all') {
         filtered = filtered.filter(p => p.categoryId === categoryId);
+      }
+      if (search) {
+        const lowerSearch = search.toLowerCase();
+        filtered = filtered.filter(p => 
+          p.productName.toLowerCase().includes(lowerSearch) || 
+          (p.description && p.description.toLowerCase().includes(lowerSearch))
+        );
       }
       const rate = await currencyService.getUsdToInrRate();
       const start = (page - 1) * limit;
@@ -122,10 +129,12 @@ class CjApiService {
     try {
       const isAll = !categoryId || categoryId === 'all';
       
-      let searchKeyword = 'baby';
-      if (categoryId === '1336151594957590528') searchKeyword = 'baby clothing';
-      else if (categoryId === '1336151594957590529') searchKeyword = 'baby toy';
-      else if (categoryId === '1336151594957590530') searchKeyword = 'baby care';
+      let searchKeyword = search || 'baby';
+      if (!search) {
+        if (categoryId === '1336151594957590528') searchKeyword = 'baby clothing';
+        else if (categoryId === '1336151594957590529') searchKeyword = 'baby toy';
+        else if (categoryId === '1336151594957590530') searchKeyword = 'baby care';
+      }
 
       const data = await this.fetchApi<any>('/product/listV2', {
         page: page,

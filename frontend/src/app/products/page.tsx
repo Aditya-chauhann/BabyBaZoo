@@ -8,6 +8,7 @@ import { ChevronDown } from "lucide-react";
 function ProductsList() {
   const searchParams = useSearchParams();
   const categoryId = searchParams.get("categoryId");
+  const searchQuery = searchParams.get("search");
   
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,21 +29,13 @@ function ProductsList() {
       const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
       let url = `${baseUrl}/products?limit=24&page=${pageNum}`;
       if (categoryId) url += `&categoryId=${categoryId}`;
+      if (searchQuery) url += `&search=${encodeURIComponent(searchQuery)}`;
 
       const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to fetch");
       const data = await res.json();
       
       let newProducts = data.list || [];
-      
-      // Client-side filtering for search query
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        newProducts = newProducts.filter((p: any) => 
-          p.productName.toLowerCase().includes(query) || 
-          (p.description && p.description.toLowerCase().includes(query))
-        );
-      }
       
       // Client-side sorting for demonstration
       if (sortBy === "Price Low-High") {
