@@ -19,6 +19,7 @@ export default function ProductDetailPage() {
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const [showImageModal, setShowImageModal] = useState(false);
+  const [modalActiveImage, setModalActiveImage] = useState<string>('');
   const [isDescExpanded, setIsDescExpanded] = useState(false);
   
   useEffect(() => {
@@ -98,12 +99,32 @@ export default function ProductDetailPage() {
   };
 
   if (loading) {
-    return <div className="min-h-screen pt-28 flex justify-center items-center">Loading...</div>;
+    return (
+      <div className="min-h-screen pt-8 flex justify-center items-center bg-gray-50/30">
+        <div className="flex flex-col items-center gap-6">
+          {/* Logo Box with Pulsing Glow */}
+          <div className="relative">
+            <div className="absolute inset-0 bg-[var(--gold)]/20 blur-xl rounded-full animate-pulse"></div>
+            <div className="relative w-24 h-24 bg-white rounded-[2rem] shadow-xl flex items-center justify-center border border-gray-100 animate-pulse duration-1000">
+              <span className="font-serif text-4xl font-bold tracking-tighter">
+                <span className="text-[var(--gold)]">B</span><span className="text-gray-900">B</span><span className="text-[var(--gold)]">Z</span>
+              </span>
+            </div>
+          </div>
+          {/* Bouncing Dots */}
+          <div className="flex items-center gap-2 mt-2">
+            <div className="w-2.5 h-2.5 rounded-full bg-[var(--gold)] animate-bounce" style={{ animationDelay: '0ms' }}></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-gray-300 animate-bounce" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-[var(--gold)] animate-bounce" style={{ animationDelay: '300ms' }}></div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen pt-28 flex flex-col justify-center items-center">
+      <div className="min-h-screen pt-12 flex flex-col justify-center items-center">
         <h1 className="text-2xl font-serif mb-4">Product Not Found</h1>
         <button onClick={() => router.push('/products')} className="text-[var(--gold)] hover:underline">
           Back to Products
@@ -112,10 +133,21 @@ export default function ProductDetailPage() {
     );
   }
 
+  const mainImgStr = product.productImage || '';
+  let mainImg = mainImgStr;
+  if (mainImgStr.startsWith('[')) {
+    try {
+      const parsed = JSON.parse(mainImgStr);
+      if (Array.isArray(parsed) && parsed.length > 0) mainImg = parsed[0];
+    } catch(e){}
+  }
+  const allImages = [...(mainImg ? [mainImg] : []), ...descImages];
+  const currentActiveModalImage = modalActiveImage || allImages[0];
+
   return (
-    <div className="min-h-screen bg-gray-50 pt-28 pb-16 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="max-w-7xl mx-auto">
-        <Link href="/products" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[var(--gold)] mb-8 transition-colors">
+    <div className="min-h-screen bg-gray-50 pt-8 pb-16 px-4 sm:px-6 lg:px-8 font-sans">
+      <div className="max-w-[1500px] mx-auto">
+        <Link href="/products" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[var(--gold)] mb-5 transition-colors">
           <ArrowLeft size={16} /> Back to Products
         </Link>
 
@@ -144,6 +176,7 @@ export default function ProductDetailPage() {
               }}
               onClick={(e) => {
                 setShowImageModal(true);
+                // The modalActiveImage will default to the first image in allImages if empty, or we can explicitly set it here if we want.
               }}
             >
               <img 
@@ -167,7 +200,7 @@ export default function ProductDetailPage() {
               <p className="text-sm font-semibold uppercase tracking-wider text-[var(--gold)] mb-2">
                 {product.categoryName}
               </p>
-              <h1 className="text-3xl md:text-4xl font-serif text-gray-900 leading-tight mb-4">
+              <h1 className="text-xl md:text-2xl font-sans font-medium text-gray-900 leading-snug mb-4">
                 {product.productName}
               </h1>
               
@@ -303,33 +336,75 @@ export default function ProductDetailPage() {
           </div>
         )}
       </div>
-      {/* Image Modal */}
+      {/* Enhanced Image Modal */}
       {showImageModal && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/90 backdrop-blur-sm"
-          onClick={() => setShowImageModal(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-gray-900/95 backdrop-blur-md"
+          onClick={() => {
+            setShowImageModal(false);
+            setModalActiveImage('');
+          }}
         >
-          <button 
-            className="absolute top-6 right-6 text-white hover:text-gray-300"
-            onClick={() => setShowImageModal(false)}
-          >
-            <X size={32} />
-          </button>
-          <img 
-            src={(() => {
-              let img = product.productImage || '';
-              if (img.startsWith('[')) {
-                try {
-                  const parsed = JSON.parse(img);
-                  if (Array.isArray(parsed) && parsed.length > 0) return parsed[0];
-                } catch(e){}
-              }
-              return img;
-            })()} 
-            alt={product.productName}
-            className="max-w-full max-h-[90vh] object-contain rounded-lg"
+          {/* Modal Container */}
+          <div 
+            className="w-full max-w-7xl h-[85vh] bg-white rounded-2xl flex flex-col overflow-hidden relative shadow-2xl animate-in zoom-in duration-300"
             onClick={(e) => e.stopPropagation()}
-          />
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+              <div className="flex gap-6">
+                <button className="text-[var(--gold)] font-medium border-b-2 border-[var(--gold)] pb-1">IMAGES</button>
+              </div>
+              <button 
+                className="text-gray-400 hover:text-gray-900 transition-colors"
+                onClick={() => {
+                  setShowImageModal(false);
+                  setModalActiveImage('');
+                }}
+              >
+                <X size={28} />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="flex flex-1 overflow-hidden flex-col md:flex-row">
+              {/* Main Image Viewer */}
+              <div className="flex-1 bg-gray-50/50 flex items-center justify-center p-4 md:p-8 relative">
+                <img 
+                  src={currentActiveModalImage}
+                  alt={product.productName}
+                  className="w-full h-full object-contain mix-blend-multiply"
+                />
+              </div>
+
+              {/* Sidebar: Details & Thumbnails */}
+              <div className="w-full md:w-[450px] bg-white border-l border-gray-100 flex flex-col p-6 overflow-y-auto">
+                <h2 className="text-lg md:text-xl font-sans font-medium text-gray-900 mb-6 leading-snug">
+                  {product.productName}
+                </h2>
+                
+                <p className="text-xs text-gray-500 mb-4 uppercase tracking-wider font-semibold">
+                  {product.categoryName}
+                </p>
+
+                <div className="grid grid-cols-4 gap-3">
+                  {allImages.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setModalActiveImage(img)}
+                      className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                        currentActiveModalImage === img 
+                          ? 'border-[var(--gold)] opacity-100' 
+                          : 'border-transparent opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <img src={img} alt={`Thumb ${idx}`} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
